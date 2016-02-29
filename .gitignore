@@ -16,8 +16,5 @@ hs_err_pid*
 team-proteus.iml
 
 #eclipse generated files
-.settings/
-.classpath
-.project
 build/
 target/
