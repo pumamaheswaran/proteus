@@ -14,3 +14,10 @@ hs_err_pid*
 #intellij idea generated files
 .idea/
 team-proteus.iml
+
+#eclipse generated files
+.settings/
+.classpath
+.project
+build/
+target/

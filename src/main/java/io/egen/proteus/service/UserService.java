@@ -1,7 +1,15 @@
 package io.egen.proteus.service;
 
+import io.egen.proteus.entity.User;
+import io.egen.proteus.exception.UserAlreadyExistsException;
+
 /**
- * Created by Pravin on 2/21/2016.
+ * 
+ * @author Pravin Umamaheswaran
+ *
  */
-public class UserService {
+public interface UserService {
+	
+	public User createUser(User user) throws UserAlreadyExistsException;
+	
 }

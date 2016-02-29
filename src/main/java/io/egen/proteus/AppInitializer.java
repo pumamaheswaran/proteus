@@ -1,0 +1,26 @@
+package io.egen.proteus;
+
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+/**
+ * A spring specific class.
+ * @author Pravin Umamaheswaran
+ *
+ */
+public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+	@Override
+	protected Class<?>[] getRootConfigClasses() {		
+		return new Class[] {AppConfig.class,JPAConfig.class};
+	}
+
+	@Override
+	protected Class<?>[] getServletConfigClasses() {		
+		return null;
+	}
+
+	@Override
+	protected String[] getServletMappings() {		
+		return new String[] {"/"};
+	}
+}
