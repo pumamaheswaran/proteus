@@ -11,6 +11,8 @@ import io.egen.proteus.entity.Title;
  */
 public interface TitleRepository {
 	
+	public Title findTitleByID(String imdbID); 
+	
 	public Title rateTitle(Title title);
 	
 	public Title addTitle(Title title);

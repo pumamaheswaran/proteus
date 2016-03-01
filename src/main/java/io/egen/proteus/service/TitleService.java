@@ -21,5 +21,5 @@ public interface TitleService {
 	
 	public Title editTitle(Title title) throws TitleNotFoundException;
 	
-	public void deleteTitle(Title title) throws TitleNotFoundException;
+	public void deleteTitle(String imdbID) throws TitleNotFoundException;
 }

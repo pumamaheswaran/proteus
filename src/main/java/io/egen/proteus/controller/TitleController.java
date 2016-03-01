@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 @RestController
-@RequestMapping("title")
+@RequestMapping("/title")
 public class TitleController {
 	
 	@Autowired
@@ -50,7 +50,7 @@ public class TitleController {
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
 	public List<Title> getTopRatedTitles() {
-		return null;
+		return service.getTopRatedTitles();
 	}
 	
 	@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
@@ -61,8 +61,8 @@ public class TitleController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public Title addNewTitle(@RequestBody Title title) throws TitleAlreadyExistsException {
-		return null;
+	public Title addNewTitle(@RequestBody Title title) throws TitleAlreadyExistsException {		
+		return service.addNewTitle(title);
 	}
 	
 	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
@@ -74,7 +74,7 @@ public class TitleController {
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
 	public Title editTitle(@PathVariable("id") String id,@RequestBody Title title) throws TitleNotFoundException {
-		return null;
+		return service.editTitle(title);
 	}
 	
 	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
@@ -86,7 +86,7 @@ public class TitleController {
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
 	public void deleteTitle(@PathVariable("id") String id) throws TitleNotFoundException {
-		
+		service.deleteTitle(id);
 	}
 	
 }
