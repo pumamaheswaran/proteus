@@ -1,7 +1,9 @@
 package io.egen.proteus.service;
 
 import io.egen.proteus.entity.User;
+import io.egen.proteus.exception.InvalidLoginCredentialsException;
 import io.egen.proteus.exception.UserAlreadyExistsException;
+import io.egen.proteus.exception.UserNotFoundException;
 
 /**
  * 
@@ -12,4 +14,7 @@ public interface UserService {
 	
 	public User createUser(User user) throws UserAlreadyExistsException;
 	
+	public String login(User user) throws UserNotFoundException, InvalidLoginCredentialsException;
+	
+	public String signout(String token);
 }

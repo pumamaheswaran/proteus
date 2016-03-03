@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 @Api(tags="comments")
 public class CommentsController {
 	

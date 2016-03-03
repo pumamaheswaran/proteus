@@ -3,7 +3,10 @@ package io.egen.proteus;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import io.egen.proteus.interceptor.LoginInterceptor;
 
 /**
  * A spring specific class.
@@ -14,5 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @ComponentScan
 public class AppConfig extends WebMvcConfigurerAdapter {
-
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		
+		registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/users","/users/login");
+	}
 }

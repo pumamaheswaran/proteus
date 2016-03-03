@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 @RestController
-@RequestMapping("/title")
+@RequestMapping("/api/title")
 public class TitleController {
 	
 	@Autowired
