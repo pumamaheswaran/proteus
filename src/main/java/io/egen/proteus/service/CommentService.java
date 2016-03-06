@@ -1,6 +1,7 @@
 package io.egen.proteus.service;
 
 import java.util.List;
+import java.util.Set;
 
 import io.egen.proteus.entity.Comment;
 import io.egen.proteus.exception.TitleNotFoundException;
@@ -12,8 +13,8 @@ import io.egen.proteus.exception.TitleNotFoundException;
  */
 public interface CommentService {
 	
-	public Comment registerComment(Comment comment) throws TitleNotFoundException;	
-	
-	public List<Comment> getComments(String imdbId) throws TitleNotFoundException;
+	public Set<Comment> getComments(String imdbId) throws TitleNotFoundException;
+
+	public Comment registerComment(String string, String imdbId, Comment comment) throws TitleNotFoundException;
 
 }

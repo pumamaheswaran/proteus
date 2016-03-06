@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.egen.proteus.dto.AuthTokenDTO;
 import io.egen.proteus.entity.User;
 import io.egen.proteus.exception.InvalidLoginCredentialsException;
 import io.egen.proteus.exception.LoginRequiredException;
@@ -50,7 +51,7 @@ public class UserController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public String userLogin(@RequestBody User user) throws UserNotFoundException, InvalidLoginCredentialsException {
+	public AuthTokenDTO userLogin(@RequestBody User user) throws UserNotFoundException, InvalidLoginCredentialsException {
 		return service.login(user);
 	}
 	
@@ -61,7 +62,7 @@ public class UserController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public String logoutUser(@RequestHeader(value="Authorization") String token) throws LoginRequiredException {
+	public AuthTokenDTO logoutUser(@RequestHeader(value="Authorization") String token) throws LoginRequiredException {
 				
 		return service.signout(token);		
 	}

@@ -1,9 +1,14 @@
 package io.egen.proteus.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 /**
  * A class representing a movie title.
@@ -12,6 +17,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table
+@NamedQueries(
+		@NamedQuery(name="Title.getTopRatedTitles",query="SELECT t from Title t order by t.imdbRating desc")
+)
+
 public class Title {
 
 	private String title;
@@ -34,6 +43,11 @@ public class Title {
 	@Id
 	private String imdbID;
 	private String type;
+	@OneToMany(fetch = FetchType.EAGER , mappedBy = "title")
+	private Set<Comment> comments;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="title")
+	private Set<Rating> ratings;
 	
 	public String getTitle() {
 		return title;
@@ -148,5 +162,17 @@ public class Title {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}	
+	}
+	public Set<Rating> getRatings() {
+		return ratings;
+	}
+	public void setRatings(Set<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	public Set<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}		
 }

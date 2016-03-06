@@ -1,14 +1,20 @@
 package io.egen.proteus.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.egen.proteus.entity.Rating;
 import io.egen.proteus.entity.Title;
+import io.egen.proteus.entity.User;
 import io.egen.proteus.exception.TitleAlreadyExistsException;
 import io.egen.proteus.exception.TitleNotFoundException;
+import io.egen.proteus.exception.UnauthorizedException;
+import io.egen.proteus.exception.UserNotFoundException;
 import io.egen.proteus.repository.TitleRepository;
+import io.egen.proteus.repository.UserRepository;
 /**
  * A REST service that performs CRUD operations on movie titles.
  * @author Pravin Umamaheswaran
@@ -19,6 +25,9 @@ public class TitleServiceImpl implements TitleService {
 	
 	@Autowired
 	private TitleRepository dao;
+	
+	@Autowired
+	private UserRepository userDao;
 
 	@Override
 	public void rateTitle(Title title) throws TitleNotFoundException {
@@ -43,8 +52,12 @@ public class TitleServiceImpl implements TitleService {
 	}
 
 	@Override
-	public Title addNewTitle(Title title) throws TitleAlreadyExistsException {
-		// TODO Auto-generated method stub
+	public Title addNewTitle(Title title, String role) throws TitleAlreadyExistsException,UnauthorizedException {
+		
+		if(!role.equals("admin")) {
+			throw new UnauthorizedException();
+		}
+		
 		Title newTitle = null;
 		Title daoTitle = dao.findTitleByID(title.getImdbID());
 		if(daoTitle==null){
@@ -57,8 +70,12 @@ public class TitleServiceImpl implements TitleService {
 	}
 
 	@Override
-	public Title editTitle(Title title) throws TitleNotFoundException {
-		// TODO Auto-generated method stub
+	public Title editTitle(Title title, String role) throws TitleNotFoundException,UnauthorizedException {
+		
+		if(!role.equals("admin")) {
+			throw new UnauthorizedException();
+		}
+		
 		Title editedTitle = null;
 		Title daoTitle = dao.findTitleByID(title.getImdbID());
 		if(daoTitle!=null){
@@ -71,8 +88,12 @@ public class TitleServiceImpl implements TitleService {
 	}
 
 	@Override
-	public void deleteTitle(String imdbID) throws TitleNotFoundException {
-		// TODO Auto-generated method stub
+	public void deleteTitle(String imdbID, String role) throws TitleNotFoundException,UnauthorizedException {
+		
+		if(!role.equals("admin")) {
+			throw new UnauthorizedException();
+		}		
+		
 		Title daoTitle = dao.findTitleByID(imdbID);
 		if(daoTitle!=null){
 			dao.deleteTitle(daoTitle);
@@ -80,5 +101,20 @@ public class TitleServiceImpl implements TitleService {
 		else{
 			throw new TitleNotFoundException();
 		}		
+	}
+
+	@Override
+	public Title getTitleDetails(String imdbId) throws TitleNotFoundException {
+		Title title = dao.findTitleByID(imdbId);
+		if(title == null) {
+			throw new TitleNotFoundException();
+		}		
+		return title;
+	}
+
+	@Override
+	public Rating registerRating(String email, String imdbId, Rating rating) throws TitleNotFoundException,UserNotFoundException {
+		
+		return dao.registerRating(email, imdbId, rating);
 	}
 }

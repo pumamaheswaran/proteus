@@ -1,10 +1,13 @@
 package io.egen.proteus.controller;
 
-import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.egen.proteus.entity.Comment;
 import io.egen.proteus.exception.TitleNotFoundException;
 import io.egen.proteus.service.CommentServiceImpl;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,19 +35,20 @@ public class CommentsController {
 	private CommentServiceImpl service;
 	
 	
-	@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
+	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
 			method=RequestMethod.POST)
-	@ApiOperation(value="Register a comment",notes="Does not have a return value")
+	@ApiOperation(value="Register a comment",notes="Returns the registered comment")
 	@ApiResponses(value={
 			@ApiResponse(code=200, message="Success"),
 			@ApiResponse(code=404,message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public void registerComment(Comment comment) throws TitleNotFoundException {
-		service.registerComment(comment);
+	public Comment registerComment(HttpServletRequest request, @PathVariable("id") String imdbId, @RequestBody Comment comment) throws TitleNotFoundException {
+		Claims claims = (Claims) request.getAttribute("claims");
+		return service.registerComment(claims.getSubject(), imdbId, comment);
 	}
 	
-	@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
+	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
 			method=RequestMethod.GET)
 	@ApiOperation(value="Find comments related to a title",notes="Returns a list of comments")
 	@ApiResponses(value={
@@ -51,7 +56,7 @@ public class CommentsController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})	
-	public List<Comment> getComments(@PathVariable("imdbId") String imdbId) throws TitleNotFoundException {
+	public Set<Comment> getComments(@PathVariable("id") String imdbId) throws TitleNotFoundException {
 		return service.getComments(imdbId);
 	}
 }

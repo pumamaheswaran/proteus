@@ -2,6 +2,7 @@ package io.egen.proteus.repository;
 
 import java.util.List;
 
+import io.egen.proteus.entity.Rating;
 import io.egen.proteus.entity.Title;
 
 /**
@@ -22,5 +23,7 @@ public interface TitleRepository {
 	public Title editTitle(Title title);
 	
 	public void deleteTitle(Title title);
+
+	public Rating registerRating(String email, String imdbId, Rating rating);
 	
 }

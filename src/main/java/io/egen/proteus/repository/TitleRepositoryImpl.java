@@ -2,18 +2,23 @@ package io.egen.proteus.repository;
 
 import java.util.List;
 
-import io.egen.proteus.entity.Title;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
+
+import io.egen.proteus.entity.Rating;
+import io.egen.proteus.entity.Title;
+import io.egen.proteus.entity.User;
 /**
  * 
  * @author Omkar Gadgil
  *
  */
 @Repository
+@Transactional
 public class TitleRepositoryImpl implements TitleRepository {
 	
 	@PersistenceContext
@@ -33,7 +38,7 @@ public class TitleRepositoryImpl implements TitleRepository {
 	
 	@Override
 	public void deleteTitle(Title title){
-		em.remove(title);		
+		em.remove(em.merge(title));		
 	}
 	
 	@Override
@@ -52,9 +57,21 @@ public class TitleRepositoryImpl implements TitleRepository {
 	}
 	
 	@Override
-	public List<Title> getTopRatedTitles(){
-		List<Title> topRated = null;
+	public List<Title> getTopRatedTitles() {
+		TypedQuery<Title> query = em.createNamedQuery("Title.getTopRatedTitles", Title.class);
+    	List<Title> topRated = query.getResultList();
 		return topRated;
+	}
+
+	@Override
+	public Rating registerRating(String email, String imdbId, Rating rating) {
+		
+		User user = em.find(User.class, email);
+		Title title = em.find(Title.class, imdbId);
+		rating.setTitle(title);
+		rating.setUser(user);
+		em.persist(rating);
+		return rating;
 	}
 
 }

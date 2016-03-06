@@ -1,7 +1,5 @@
 package io.egen.proteus.interceptor;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         final Claims claims = Jwts.parser().setSigningKey("secretkey")
 		    .parseClaimsJws(token).getBody();
-        
+        System.out.println(claims.getExpiration());
 		request.setAttribute("claims", claims);
 		return true;
 	}

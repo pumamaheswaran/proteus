@@ -2,6 +2,8 @@ package io.egen.proteus.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.egen.proteus.entity.Rating;
 import io.egen.proteus.entity.Title;
 import io.egen.proteus.exception.TitleAlreadyExistsException;
 import io.egen.proteus.exception.TitleNotFoundException;
+import io.egen.proteus.exception.UnauthorizedException;
+import io.egen.proteus.exception.UserNotFoundException;
 import io.egen.proteus.service.TitleServiceImpl;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -25,22 +31,10 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 @RequestMapping("/api/title")
-public class TitleController {
+public class TitleController {	
 	
 	@Autowired
 	private TitleServiceImpl service;
-	
-	/*@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
-			method=RequestMethod.POST)
-	@ApiOperation(value="Rate a title",notes="Does not have a return value")
-	@ApiResponses(value={
-			@ApiResponse(code=200, message="Success"),
-			@ApiResponse(code=404, message="Not found"),
-			@ApiResponse(code=500, message="Internal Server Error")
-	})
-	public void rateTitle(Title title) throws TitleNotFoundException {
-		
-	}*/
 	
 	@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
 			method=RequestMethod.GET)
@@ -61,8 +55,10 @@ public class TitleController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public Title addNewTitle(@RequestBody Title title) throws TitleAlreadyExistsException {		
-		return service.addNewTitle(title);
+	public Title addNewTitle(HttpServletRequest request, @RequestBody Title title) throws TitleAlreadyExistsException, UnauthorizedException {		
+		Claims claims = (Claims)request.getAttribute("claims");
+		String role = claims.get("role", String.class);
+		return service.addNewTitle(title,role);
 	}
 	
 	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
@@ -73,20 +69,53 @@ public class TitleController {
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public Title editTitle(@PathVariable("id") String id,@RequestBody Title title) throws TitleNotFoundException {
-		return service.editTitle(title);
+	public Title editTitle(HttpServletRequest request, @PathVariable("id") String id,@RequestBody Title title) throws TitleNotFoundException, UnauthorizedException {
+		Claims claims = (Claims)request.getAttribute("claims");
+		String role = claims.get("role", String.class);
+		return service.editTitle(title, role);
 	}
 	
-	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
-			method=RequestMethod.DELETE)
+	@RequestMapping(value="{id}",method=RequestMethod.DELETE)
 	@ApiOperation(value="Delete an existing title",notes="Does not have a return value")
 	@ApiResponses(value={
 			@ApiResponse(code=200, message="Success"),
 			@ApiResponse(code=404, message="Not found"),
 			@ApiResponse(code=500, message="Internal Server Error")
 	})
-	public void deleteTitle(@PathVariable("id") String id) throws TitleNotFoundException {
-		service.deleteTitle(id);
+	public void deleteTitle(HttpServletRequest request,@PathVariable("id") String id) throws TitleNotFoundException, UnauthorizedException {
+		
+		Claims claims = (Claims)request.getAttribute("claims");
+		String role = claims.get("role", String.class);
+		service.deleteTitle(id,role);
 	}
 	
+	@RequestMapping(value="{id}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value="Get details of a particular title",notes="Returns title details")
+	@ApiResponses(value={
+			@ApiResponse(code=200, message="Success"),
+			@ApiResponse(code=404, message="Not found"),
+			@ApiResponse(code=500, message="Internal Server Error")
+	})
+	public Title getTitleDetails(@PathVariable("id") String id) throws TitleNotFoundException {
+		return service.getTitleDetails(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value="Get top rated titles",notes="Returns list of top rated titles")
+	@ApiResponses(value={
+			@ApiResponse(code=200, message="Success"),
+			@ApiResponse(code=404, message="Not found"),
+			@ApiResponse(code=500, message="Internal Server Error")
+	})
+	public List<Title> getTitleDetails() {
+		return service.getTopRatedTitles();
+	}
+	
+	@RequestMapping(path="/rating/{id}",method = RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Rating rateTitle(HttpServletRequest request ,@PathVariable("id") String id,
+			@RequestBody Rating rating) throws UserNotFoundException, TitleNotFoundException {
+		Claims claims = (Claims)request.getAttribute("claims");		
+		return service.registerRating(claims.getSubject(), id, rating);
+	}
 }

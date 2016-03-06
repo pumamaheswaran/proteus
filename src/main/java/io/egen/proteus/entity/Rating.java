@@ -1,9 +1,12 @@
 package io.egen.proteus.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -19,8 +22,14 @@ public class Rating {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int ratingId;
 	private float rating;
-	private int userId;
-	private String imdbId;
+	
+	@ManyToOne(fetch= FetchType.EAGER)
+	@JoinColumn(name="imdbID",nullable=false)
+	private Title title;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="email",nullable=false)
+	private User user;
 	
 	public int getRatingId() {
 		return ratingId;
@@ -34,16 +43,16 @@ public class Rating {
 	public void setRating(float rating) {
 		this.rating = rating;
 	}
-	public int getUserId() {
-		return userId;
+	public Title getTitle() {
+		return title;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setTitle(Title title) {
+		this.title = title;
 	}
-	public String getImdbId() {
-		return imdbId;
+	public User getUser() {
+		return user;
 	}
-	public void setImdbId(String imdbId) {
-		this.imdbId = imdbId;
-	}
+	public void setUser(User user) {
+		this.user = user;
+	}	
 }

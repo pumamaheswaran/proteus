@@ -1,6 +1,6 @@
 package io.egen.proteus.repository;
 
-import java.util.List;
+import java.util.Set;
 
 import io.egen.proteus.entity.Comment;
 
@@ -11,8 +11,8 @@ import io.egen.proteus.entity.Comment;
  */
 public interface CommentsRepository {
 	
-	public void registerComment(Comment comment);
+	public Comment registerComment(String email, String imdbId, Comment comment);
 	
-	public List<Comment> getComments(String imdbId);
+	public Set<Comment> getComments(String imdbId);
 
 }

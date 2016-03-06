@@ -1,12 +1,13 @@
 package io.egen.proteus.service;
 
-import java.util.List;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.egen.proteus.entity.Comment;
-import io.egen.proteus.entity.Title;
 import io.egen.proteus.exception.TitleNotFoundException;
+import io.egen.proteus.repository.CommentsRepository;
 /**
  * A REST service that performs CRUD operations on comments.
  * @author Pravin Umamaheswaran
@@ -15,15 +16,16 @@ import io.egen.proteus.exception.TitleNotFoundException;
 @Service
 public class CommentServiceImpl implements CommentService {
 
+	@Autowired
+	CommentsRepository dao;
+	
 	@Override
-	public Comment registerComment(Comment comment) throws TitleNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public Comment registerComment(String email, String imdbId, Comment comment) throws TitleNotFoundException {
+		return dao.registerComment(email, imdbId, comment);
 	}
 
 	@Override
-	public List<Comment> getComments(String imdbId) throws TitleNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Comment> getComments(String imdbId) throws TitleNotFoundException {
+		return dao.getComments(imdbId);
 	}	
 }
