@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiResponses;
  */
 @RestController
 @RequestMapping("/api/comments")
-@Api(tags="comments")
 public class CommentsController {
 	
 	@Autowired
@@ -48,7 +47,7 @@ public class CommentsController {
 		return service.registerComment(claims.getSubject(), imdbId, comment);
 	}
 	
-	@RequestMapping(value="{id}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
+	@RequestMapping(value="{id}",produces=MediaType.APPLICATION_JSON_VALUE,
 			method=RequestMethod.GET)
 	@ApiOperation(value="Find comments related to a title",notes="Returns a list of comments")
 	@ApiResponses(value={

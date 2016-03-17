@@ -26,14 +26,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-						
+		
+		if(request.getMethod().equals("OPTIONS")) {
+			System.out.println("Forwarded OPTIONS");
+			return true;
+		}		
+		
 		final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new LoginRequiredException();
         }
-
+        
         final String token = authHeader.substring(7);
-
+        System.out.println(token);
         final Claims claims = Jwts.parser().setSigningKey("secretkey")
 		    .parseClaimsJws(token).getBody();
         System.out.println(claims.getExpiration());

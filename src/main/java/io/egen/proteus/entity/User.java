@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**A class representing a user.
  * @author Pravin Umamaheswaran
  */
@@ -31,6 +34,7 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
 	private Set<Rating> ratings;
 	
+	@JsonManagedReference("USER_COMMENT")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
 	private Set<Comment> comments;
 					

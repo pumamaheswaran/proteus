@@ -66,4 +66,15 @@ public class UserController {
 				
 		return service.signout(token);		
 	}
+	
+	@RequestMapping(method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value="Test user service", notes="Returns empty user object")
+	@ApiResponses(value={
+			@ApiResponse(code=200, message="Success"),
+			@ApiResponse(code=404, message="Not found"),
+			@ApiResponse(code=500, message="Internal Server Error")
+	})
+	public User test() {
+		return new User();
+	}
 }

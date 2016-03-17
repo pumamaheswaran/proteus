@@ -39,8 +39,7 @@ public class TitleServiceImpl implements TitleService {
 		}
 		else{
 			throw new TitleNotFoundException();
-		}
-		
+		}		
 	}
 
 	@Override

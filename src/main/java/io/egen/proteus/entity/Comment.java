@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * A class representing a comment made by the user on a movie.
  * @author Pravin Umamaheswaran
@@ -23,10 +26,12 @@ public class Comment {
 	private int commentId;
 	private String comment;
 	
+	@JsonBackReference("TITLE_COMMENT")
 	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name="imdbID",nullable=false)
 	private Title title;
 	
+	@JsonBackReference("USER_COMMENT")
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="email",nullable=false)
 	private User user;

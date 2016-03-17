@@ -3,6 +3,7 @@ package io.egen.proteus.entity;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -10,6 +11,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 /**
  * A class representing a movie title.
  * @author Pravin Umamaheswaran
@@ -24,14 +27,18 @@ import javax.persistence.Table;
 public class Title {
 
 	private String title;
+	@Column(nullable=true)
 	private int year;
 	private String rated;
 	private Date released;
+	@Column(nullable=true)
 	private int runtime;
 	private String genre;
 	private String director;
+	@Column(columnDefinition="VARCHAR(1200)")
 	private String writer;
 	private String actors;
+	@Column(columnDefinition="VARCHAR(400)")
 	private String plot;
 	private String language;
 	private String country;
@@ -43,6 +50,8 @@ public class Title {
 	@Id
 	private String imdbID;
 	private String type;
+	
+	@JsonManagedReference("TITLE_COMMENT")
 	@OneToMany(fetch = FetchType.EAGER , mappedBy = "title")
 	private Set<Comment> comments;
 	
@@ -174,5 +183,5 @@ public class Title {
 	}
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
-	}		
+	}			
 }
