@@ -116,4 +116,9 @@ public class TitleServiceImpl implements TitleService {
 		
 		return dao.registerRating(email, imdbId, rating);
 	}
+
+	@Override
+	public List<Title> getCatalog() {
+		return dao.getCatalog();
+	}
 }

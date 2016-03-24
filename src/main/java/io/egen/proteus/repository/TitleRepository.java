@@ -26,4 +26,5 @@ public interface TitleRepository {
 
 	public Rating registerRating(String email, String imdbId, Rating rating);
 	
+	public List<Title> getCatalog();
 }

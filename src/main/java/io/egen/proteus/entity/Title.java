@@ -20,9 +20,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table
-@NamedQueries(
-		@NamedQuery(name="Title.getTopRatedTitles",query="SELECT t from Title t order by t.imdbRating desc")
-)
+@NamedQueries({
+		@NamedQuery(name="Title.getTopRatedTitles",query="SELECT t from Title t order by t.imdbRating desc"),
+		@NamedQuery(name="Title.getCatalog",query="SELECT t from Title t")
+})
 
 public class Title {
 

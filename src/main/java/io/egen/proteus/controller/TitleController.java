@@ -47,6 +47,17 @@ public class TitleController {
 		return service.getTopRatedTitles();
 	}
 	
+	@RequestMapping(path="/all",produces=MediaType.APPLICATION_JSON_VALUE,
+			method=RequestMethod.GET)
+	@ApiOperation(value="Get all titles",notes="Returns a list of all titles")
+	@ApiResponses(value={
+			@ApiResponse(code=200, message="Success"),
+			@ApiResponse(code=500, message="Internal Server Error")
+	})
+	public List<Title> getCatalog() {
+		return service.getTopRatedTitles();
+	}
+	
 	@RequestMapping(consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE,
 			method=RequestMethod.POST)
 	@ApiOperation(value="Add a new title",notes="Returns the added title")

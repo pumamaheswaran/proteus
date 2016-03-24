@@ -74,4 +74,11 @@ public class TitleRepositoryImpl implements TitleRepository {
 		return rating;
 	}
 
+	@Override
+	public List<Title> getCatalog() {
+		TypedQuery<Title> query = em.createNamedQuery("Title.getCatalog", Title.class);
+    	List<Title> catalog = query.getResultList();
+		return catalog;
+	}
+
 }

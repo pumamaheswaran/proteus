@@ -29,4 +29,6 @@ public interface TitleService {
 	public Title getTitleDetails(String imdbId) throws TitleNotFoundException;
 
 	public Rating registerRating(String subject, String imdbId, Rating rating) throws TitleNotFoundException, UserNotFoundException;
+
+	public List<Title> getCatalog();
 }
